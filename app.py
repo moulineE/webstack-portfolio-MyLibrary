@@ -42,11 +42,22 @@ def not_found(error):
 
 @login_manager.user_loader
 def load_user(user_id: str) -> User | None:
+    """
+    retrieve the corresponding User object from the storage system
+    to Flask-Login
+    :param user_id:
+    :return:
+    """
     return storage.pub_get(User, user_id)
 
 
 @app.route('/mylibrary/login', methods=['GET', 'POST'])
 def login() -> str | Response:
+    """
+    Login route for the user to login to the app and
+    access the app user features
+    :return:
+    """
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -62,12 +73,21 @@ def login() -> str | Response:
 @app.route('/mylibrary/logout')
 @login_required
 def logout() -> Response:
+    """
+    logout route for the user to logout of the app
+    and redirect to the home page
+    :return:
+    """
     logout_user()
     return redirect(url_for('home_page'))
 
 
 @app.route('/mylibrary/register', methods=['GET', 'POST'])
 def register() -> str | Response:
+    """
+    Register route for the user to register an account with the app
+    :return:
+    """
     if request.method == 'POST':
         first_name = request.form['first_name']
         last_name = request.form['last_name']
@@ -84,6 +104,10 @@ def register() -> str | Response:
 @app.route('/mylibrary/profile', methods=['GET', 'POST'])
 @login_required
 def profile() -> str | Response:
+    """
+    Profile route for the user to update their profile
+    :return:
+    """
     if request.method == 'POST':
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
@@ -105,12 +129,20 @@ def profile() -> str | Response:
 
 @app.route('/', strict_slashes=False)
 def landing_page() -> str:
+    """
+    Landing page
+    :return:
+    """
     return render_template('landing.html')
 
 
 @app.route('/mylibrary')
 @app.route('/mylibrary/index.html')
 def home_page() -> str:
+    """
+    Home page route
+    :return:
+    """
     if current_user.is_authenticated:
         return render_template('index.html', user=current_user)
     return render_template('index.html')
@@ -118,6 +150,10 @@ def home_page() -> str:
 
 @app.route('/mylibrary/books', strict_slashes=False)
 def all_books() -> str:
+    """
+    All books route (not used in the app - for future use)
+    :return:
+    """
     all_books = storage.all_by_cls("Book")
     list_books = []
     for book in all_books.values():
@@ -131,6 +167,11 @@ def all_books() -> str:
 
 @app.route('/mylibrary/book', strict_slashes=False)
 def book() -> str | Response:
+    """
+    Book route to view a book and its chapters by page number and book_id
+    and updating user opened_book
+    :return:
+    """
     page = 1
     book_id = request.args.get('id')
     if request.args.get('page'):
