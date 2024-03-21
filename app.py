@@ -65,8 +65,7 @@ def login() -> str | Response:
         if user and user.check_password(password):
             login_user(user)
             return redirect(url_for('home_page'))
-        return make_response(jsonify({'error': "Invalid email,"
-                                               " or password"}), 401)
+        return render_template('login.html', error="Invalid email or password")
     return render_template('login.html')
 
 
