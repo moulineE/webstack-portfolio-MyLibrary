@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyLibrary</title>
+    <link rel="stylesheet" type="text/css" href="../static/styles/landing.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<!-- Intro Section -->
+<header class="header">
+    <nav>
+        <div class="logo">
+            <h1>MyLibrary</h1>
+            <p>A public domain library in your hand</p>
+        </div>
+        <div class="menu">
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="https://github.com/moulineE/MyLibrary">Project Repository</a></li>
+                <li><a href="https://mouline-lab.tech/mylibrary/">Deployed Project</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="main">
+        <div class="text">
+            <h4>Software Engineer</h4>
+            <h2>FULL STACK</h2>
+            <p>Mouline El mahdi</p>
+            <div class="icon">
+                <a href="https://github.com/moulineE"><i class="fa fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/el-mahdi-mouline-15919a271/"><i class="fa fa-linkedin"></i></a>
+                <a href="https://twitter.com/MoulineEl"><i class="fa fa-twitter"></i></a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Feature Section -->
+<section id="features">
+    <ul>
+        <li class="feature1">
+            <h2> - Searchable books database</h2>
+            <img class="feature-gif hide" src="path_to_your_gif.gif" alt="Description of GIF">
+            <p>A modern searchable books database that give you a quick access to the library </p>
+        </li>
+        <li class="feature-2">
+            <h2>- User system</h2>
+            <img class="feature-gif hide" src="path_to_your_gif.gif" alt="Description of GIF">
+            <p>A user system which allows you to continue reading where you left off  </p>
+        </li>
+        <li class="feature-3">
+            <h2>- Bookmark system</h2>
+            <p></p>
+            <p>A bookmark system which allows you to remember interesting pages by giving it a name </p>
+        </li>
+    </ul>
+    <!-- Repeat for other features -->
+</section>
+
+<!-- About Section -->
+<section id="about">
+    <p>My inspiration for the project</p>
+
+</section>
+</body>
+<footer>
+    <script>
+        document.querySelectorAll('#features li h2').forEach((title) => {
+            let clicked = false;
+            title.addEventListener('mouseover', function() {
+                this.nextElementSibling.classList.remove('hide');
+            });
+            title.addEventListener('mouseout', function() {
+                if (!clicked) {
+                    this.nextElementSibling.classList.add('hide');
+                }
+            });
+            title.addEventListener('click', function() {
+                clicked = !clicked;
+            });
+        });
+    </script>
+</footer>
+</html>

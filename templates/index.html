@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="initial-scale=1, width=device-width">
+    <link rel="stylesheet" href="../static/styles/index.css" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../static/scripts/index.js"></script>
+    <title>MyLibrary</title>
+</head>
+<body>
+<div id="linkbar">
+    <a href="index.html">Home</a>
+    {% if user %}
+    <a href="profile">Profile</a>
+    <a href="logout">Logout</a>
+    {% else %}
+    <a href="login">Login</a>
+    <a href="register">Register</a>
+    {% endif %}
+</div>
+    <input autocomplete="off" aufofocus name="q" placeholder="Search for a book" type="search" />
+<section class="booksResults">
+    <ul class="booksResult"></ul>
+</section>
+</body>
+</html>
