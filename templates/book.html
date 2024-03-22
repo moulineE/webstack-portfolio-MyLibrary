@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="initial-scale=1, width=device-width">
+    <link rel="stylesheet" type="text/css" href="../static/styles/book.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../static/scripts/book.js"></script>
+    <title>{{ book.book_title }}</title>
+</head>
+<body>
+<div id="linkbar">
+    <a href="index.html">Home</a>
+    {% if user %}
+    <a href="profile">Profile</a>
+    <a href="logout">Logout</a>
+        <button id="addBookmarkBtn" data-book-id="{{ book.id }}" data-page="{{ page }}" data-user-id="{{ user.id }}">Add Bookmark</button>
+        <button id="getBookmarksBtn" data-book-id="{{ book.id }}" data-user-id="{{ user.id }}">Get Bookmarks</button>
+        <div id="bookmarksContainer"></div>
+    {% else %}
+    <a href="login">Login</a>
+    <a href="register">Register</a>
+    {% endif %}
+</div>
+<h1>{{ book.book_title }}</h1>
+<p>by {{ book.author_name }}</p>
+<p class="chapter-box">{{ chapter }}</p>
+<footer>
+    <p><a href="/mylibrary/book?id={{ book.id }}&page={{ page - 1 }}">prior</a> Page {{ page }} of {{ book.chapter_count }} <a href="/mylibrary/book?id={{ book.id }}&page={{ page + 1 }}">next</a></p>
+</footer>
+</body>
+</html>
