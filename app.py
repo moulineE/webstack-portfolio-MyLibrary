@@ -135,7 +135,7 @@ def landing_page() -> str:
     return render_template('landing.html')
 
 
-@app.route('/mylibrary')
+@app.route('/mylibrary/')
 @app.route('/mylibrary/index.html')
 def home_page() -> str:
     """
