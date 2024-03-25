@@ -5,13 +5,13 @@ import models
 from models.base_model import BaseModel, Base
 from models.user import User
 from models.author import Author
-from models.book import Book
+from models.book import Book, Language
 from models.bookmark import Bookmark
 from models.opened_book import Opened_book
 from models.book_page import Book_page
 import sqlalchemy
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker, scoped_session, joinedload
 from typing import Dict, Type
 
 classes = {"User": User, "Author": Author, "Book": Book,
@@ -161,3 +161,21 @@ class DBStorage:
         else:
             count = len(models.storage.all_by_cls(cls).values())
             return count
+
+    def get_book_languages(self, book_id):
+        """get a list of languages of a book"""
+        book = self.__session.query(Book).options(
+            joinedload(Book.languages)).get(book_id)
+        if book is None:
+            print(f"No book found with id {book_id}")
+            return None
+        languages_ids = [language.id for language in book.languages]
+        return languages_ids
+
+    def get_lang_by_lang_id(self, lang_id):
+        """get a language by its id"""
+        lang = self.__session.query(Language).get(lang_id)
+        if lang is None:
+            print(f"No language found with id {lang_id}")
+            return None
+        return lang.language_name
