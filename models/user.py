@@ -18,6 +18,7 @@ class User(BaseModel, Base):
     is_active = Column(Boolean, nullable=False, default=True)
     language_id = Column(String(60), ForeignKey('languages.id'),
                          nullable=False)
+    upload_perm = Column(Boolean, default=False, nullable=False)
     bookmarks = relationship("Bookmark", backref="users",
                              cascade="all, delete")
     opened_books = relationship("Opened_book", backref="users",
