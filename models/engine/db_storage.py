@@ -28,7 +28,7 @@ class DBStorage:
     def __init__(self) -> None:
         """Initialize DBStorage"""
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
-                                      format('MyLibrary_dev',
+                                      format('MyLibrary_webstack_dev_db',
                                              'MyLibrary_dev_pwd',
                                              'localhost',
                                              'MyLibrary_dev_db'))
