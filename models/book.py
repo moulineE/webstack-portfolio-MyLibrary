@@ -9,7 +9,11 @@ book_languages = Table('book_languages', Base.metadata,
                        Column('book_id', String(60),
                               ForeignKey('books.id')),
                        Column('language_id', String(60),
-                              ForeignKey('languages.id')))
+                              ForeignKey('languages.id')),
+                       Column('book_title', String(128)),
+                       Column('published_date', Date),
+                       Column('book_summary', Text),
+                       Column('chapter_count', Integer))
 
 
 class Book(BaseModel, Base):
