@@ -5,6 +5,7 @@ from flask import (Flask, render_template, make_response, jsonify,
 from flask_login import (LoginManager, login_user, logout_user,
                          login_required, current_user)
 from flask_cors import CORS
+from flask_babel import Babel
 from models import storage
 from models.user import User
 from models.opened_book import Opened_book
@@ -13,14 +14,49 @@ from api.v1.views import app_views
 from werkzeug.security import generate_password_hash
 
 
+class Config:
+    """config for Flask app"""
+    LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_LOCALE = "en"
+
+
 login_manager = LoginManager()
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 app.secret_key = 'S6YDuvuw$f*wRp6a!TvVX&cxSaU$6'
+app.config.from_object(Config)
 cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 login_manager.init_app(app)
+
+
+def get_locale() -> str:
+    """
+    determine the best match with our supported languages by checking
+    if a session cookies if set, if not check the user is authenticated,
+    if not check the Accept-Language header in the HTTP request
+    after checking all the above, set a session cookie with the correct lang
+    """
+    locale_lang = request.cookies.get('lang')
+    if locale_lang and locale_lang in Config.LANGUAGES:
+        return locale_lang
+    if current_user.is_authenticated:
+        usr_langID = current_user.language_id
+        if usr_langID:
+            usr_lang = storage.get_lang_by_lang_id(usr_langID)
+            if usr_lang:
+                usr_lang_syb = usr_lang[:2]
+                response = make_response("Setting a session cookie")
+                response.set_cookie('lang', usr_lang_syb)
+                return usr_lang_syb
+    best_match = request.accept_languages.best_match(app.config['LANGUAGES'])
+    response = make_response("Setting a session cookie")
+    response.set_cookie('lang', best_match)
+    return best_match
+
+
+babel = Babel(app, locale_selector=get_locale)
 
 
 @app.teardown_appcontext

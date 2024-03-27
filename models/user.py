@@ -3,7 +3,7 @@
 import models
 from models.base_model import BaseModel, Base
 import sqlalchemy
-from sqlalchemy import Column, String, Boolean
+from sqlalchemy import Column, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -16,6 +16,9 @@ class User(BaseModel, Base):
     email = Column(String(128), unique=True, nullable=False)
     password = Column(String(256), nullable=False)
     is_active = Column(Boolean, nullable=False, default=True)
+    language_id = Column(String(60), ForeignKey('languages.id'),
+                         nullable=False)
+    upload_perm = Column(Boolean, default=False, nullable=False)
     bookmarks = relationship("Bookmark", backref="users",
                              cascade="all, delete")
     opened_books = relationship("Opened_book", backref="users",

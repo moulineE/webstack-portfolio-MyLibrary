@@ -11,6 +11,8 @@ class Book_page(BaseModel, Base):
     book_id = Column(String(60), ForeignKey('books.id'), nullable=False)
     page_no = Column(Integer, nullable=False)
     content = Column(Text, nullable=False)
+    language_id = Column(String(60), ForeignKey('languages.id'),
+                         nullable=False)
 
     def __init__(self, *args, **kwargs) -> None:
         """initializes book page"""
