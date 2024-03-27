@@ -16,7 +16,7 @@ from typing import Dict, Type
 
 classes = {"User": User, "Author": Author, "Book": Book,
            "Bookmark": Bookmark, "Opened_book": Opened_book,
-           "Book_page": Book_page}
+           "Book_page": Book_page, "Language": Language}
 pub_classes = {"Author": Author, "Book": Book, "Book_page": Book_page}
 
 
