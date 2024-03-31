@@ -40,9 +40,11 @@ def get_book(book_id) -> Response | tuple[Response, int]:
     return jsonify(book.to_dict())
 
 
-@app_views.route('/books/<book_id>/<page>', strict_slashes=False)
-def get_book_page(book_id, page) -> Response | tuple[Response, int]:
+@app_views.route('/books/<book_id>/<page>/', defaults={'lang': 'en'}, strict_slashes=False)
+@app_views.route('/books/<book_id>/<page>/<lang>/', strict_slashes=False)
+def get_book_page(book_id, page, lang) -> Response | tuple[Response, int]:
     """ retrieves a book page by id and page """
+    print(lang)
     chapter = storage.get_chapter(book_id, page)
     if chapter is None:
         return jsonify({"error": "Not found"}), 404
