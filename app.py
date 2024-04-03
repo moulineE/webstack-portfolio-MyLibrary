@@ -46,10 +46,9 @@ def get_locale() -> str:
         if usr_langID:
             usr_lang = storage.get_lang_by_lang_id(usr_langID)
             if usr_lang:
-                usr_lang_syb = usr_lang[:2]
                 response = make_response("Setting a session cookie")
-                response.set_cookie('lang', usr_lang_syb)
-                return usr_lang_syb
+                response.set_cookie('lang', usr_lang)
+                return usr_lang
     best_match = request.accept_languages.best_match(app.config['LANGUAGES'])
     response = make_response("Setting a session cookie")
     response.set_cookie('lang', best_match)
@@ -214,18 +213,27 @@ def book() -> str | Response:
     page = int(page)
     if page < 1:
         page = 1
+    if request.args.get('lang'):
+        lang = request.args.get('lang')
+    else:
+        lang = "en"
     book = storage.pub_get("Book", book_id)
     if not book:
         return make_response(jsonify({'error': "Book not found,"
                                                " check the book_id"}), 404)
+    book_lang = storage.get_book_by_lang(book_id, lang)
+    if not book:
+        return make_response(jsonify({'error': "lang,"
+                                               " check the lang"}), 404)
     author = storage.pub_get("Author", book.author_id)
     if not author:
         return make_response(jsonify({'error': "Author not found"}), 404)
-    book = book.to_dict()
-    book['author_name'] = "{} {}".format(author.first_name, author.last_name)
-    if page > book['chapter_count']:
-        page = book['chapter_count']
-    chapter = storage.get_chapter(book_id, page)
+    book_lang = book_lang.to_dict()
+    book_lang['author_name'] = "{} {}".format(author.first_name,
+                                              author.last_name)
+    if page > book_lang['chapter_count']:
+        page = book_lang['chapter_count']
+    chapter = storage.get_chapter(book_id, page, lang)
     if current_user.is_authenticated:
         opened_book = storage.get_opened_book_by_user_id_and_bookid(
             current_user.id, book_id)
