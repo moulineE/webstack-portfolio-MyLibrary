@@ -58,6 +58,16 @@ def get_locale() -> str:
 babel = Babel(app, locale_selector=get_locale)
 
 
+@app.after_request
+def after_request(response):
+    """ Set a cookie with the language """
+    if request.endpoint == 'set_language' or request.endpoint == 'login':
+        return response
+    locale = str(get_locale())
+    response.set_cookie('lang', locale)
+    return response
+
+
 @app.teardown_appcontext
 def close_db(error):
     """ Close Storage """
@@ -99,7 +109,11 @@ def login() -> str | Response:
         user = storage.get_user_by_email(email)
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for('home_page'))
+            langId = user.language_id
+            lang = storage.get_lang_by_lang_id(langId)
+            response = make_response(redirect(url_for('home_page')))
+            response.set_cookie('lang', lang)
+            return response
         return render_template('login.html', error="Invalid email or password")
     return render_template('login.html')
 
@@ -127,8 +141,10 @@ def register() -> str | Response:
         last_name = request.form['last_name']
         email = request.form['email']
         password = request.form['password']
+        language = request.form.get('language')
+        langid = storage.get_lang_id_by_lang_name(language)
         user = User(first_name=first_name, last_name=last_name,
-                    email=email, password=password)
+                    email=email, password=password, language_id=langid)
         BaseModel.save(user)
         login_user(user)
         return redirect(url_for('home_page'))
@@ -244,7 +260,7 @@ def book() -> str | Response:
                                         page=opened_book.page, ))
             if page > opened_book.page:
                 opened_book.page = page
-            if page == book['chapter_count']:
+            if page == book_lang['chapter_count']:
                 opened_book.read = True
             BaseModel.save(opened_book)
             pass
@@ -256,6 +272,16 @@ def book() -> str | Response:
         return render_template('book.html', user=current_user,
                                book=book, chapter=chapter, page=page)
     return render_template('book.html', book=book, chapter=chapter, page=page)
+
+
+@app.route('/set_language/<lang>')
+def set_language(lang):
+    if lang in Config.LANGUAGES:
+        response = make_response(redirect(request.referrer))
+        response.set_cookie('lang', lang)
+        return response
+    else:
+        return "Invalid language", 400
 
 
 if __name__ == '__main__':
