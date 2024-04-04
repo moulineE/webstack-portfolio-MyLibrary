@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang={{ _('html_lang') }}>
 <head>
     <meta charset="UTF-8" name="viewport" content="initial-scale=1, width=device-width">
     <link rel="stylesheet" type="text/css" href="../static/styles/book.css">
@@ -9,23 +9,28 @@
 </head>
 <body>
 <div id="linkbar">
-    <a href="index.html">Home</a>
+    <a href="index.html">{{ _('Home') }}</a>
     {% if user %}
-    <a href="profile">Profile</a>
-    <a href="logout">Logout</a>
+    <a href="profile">{{ _('profile') }}</a>
+    <a href="logout">{{ _('logout') }}</a>
         <button id="addBookmarkBtn" data-book-id="{{ book.id }}" data-page="{{ page }}" data-user-id="{{ user.id }}">Add Bookmark</button>
         <button id="getBookmarksBtn" data-book-id="{{ book.id }}" data-user-id="{{ user.id }}">Get Bookmarks</button>
         <div id="bookmarksContainer"></div>
     {% else %}
-    <a href="login">Login</a>
-    <a href="register">Register</a>
+    <a href="login">{{ _('login') }}</a>
+    <a href="register">{{ _('register') }}</a>
+    {% endif %}
+    {% if request.cookies.get('lang') == 'en' %}
+    <a href="{{ url_for('set_language', lang='fr') }}">Francais</a>
+    {% elif request.cookies.get('lang') == 'fr' %}
+    <a href="{{ url_for('set_language', lang='en') }}">English</a>
     {% endif %}
 </div>
 <h1>{{ book.book_title }}</h1>
 <p>by {{ book.author_name }}</p>
 <p class="chapter-box">{{ chapter }}</p>
 <footer>
-    <p><a href="/mylibrary/book?id={{ book.id }}&page={{ page - 1 }}">prior</a> Page {{ page }} of {{ book.chapter_count }} <a href="/mylibrary/book?id={{ book.id }}&page={{ page + 1 }}">next</a></p>
+    <p><a href="/mylibrary/book?id={{ book.id }}&page={{ page - 1 }}">{{ _('previous') }}</a> Page {{ page }} of {{ book.chapter_count }} <a href="/mylibrary/book?id={{ book.id }}&page={{ page + 1 }}">{{ _('next') }}</a></p>
 </footer>
 </body>
 </html>

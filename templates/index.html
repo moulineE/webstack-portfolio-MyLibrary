@@ -1,24 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang={{ _('html_lang') }}>
 <head>
     <meta charset="UTF-8" name="viewport" content="initial-scale=1, width=device-width">
     <link rel="stylesheet" href="../static/styles/index.css" />
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="../static/scripts/index.js"></script>
+    <script type="text/javascript" src="../static/scripts/{{ _('index.js') }}"></script>
     <title>MyLibrary</title>
 </head>
 <body>
 <div id="linkbar">
-    <a href="index.html">Home</a>
+    <a href="index.html">{{ _('Home') }}</a>
     {% if user %}
-    <a href="profile">Profile</a>
-    <a href="logout">Logout</a>
+    <a href="profile">{{ _('profile') }}</a>
+    <a href="logout">{{ _('logout') }}</a>
     {% else %}
-    <a href="login">Login</a>
-    <a href="register">Register</a>
+    <a href="login">{{ _('login') }}</a>
+    <a href="register">{{ _('register') }}</a>
+    {% endif %}
+    {% if request.cookies.get('lang') == 'en' %}
+    <a href="{{ url_for('set_language', lang='fr') }}">Francais</a>
+    {% elif request.cookies.get('lang') == 'fr' %}
+    <a href="{{ url_for('set_language', lang='en') }}">English</a>
     {% endif %}
 </div>
-    <input autocomplete="off" aufofocus name="q" placeholder="Search for a book" type="search" />
+    <input autocomplete="off" aufofocus name="q" placeholder="{{ _('search_for_a_book') }}" type="search" />
 <section class="booksResults">
     <ul class="booksResult"></ul>
 </section>
