@@ -163,6 +163,7 @@ def profile() -> str | Response:
         last_name = request.form.get('last_name')
         email = request.form.get('email')
         password = request.form.get('password')
+        language = request.form.get('language')
         user = current_user
         if first_name:
             user.first_name = first_name
@@ -172,6 +173,9 @@ def profile() -> str | Response:
             user.email = email
         if password:
             user.password = generate_password_hash(password)
+        if language:
+            langid = storage.get_lang_id_by_lang_name(language)
+            user.language_id = langid
         BaseModel.save(user)
         return redirect(url_for('home_page'))
     return render_template('profile.html', user=current_user)
