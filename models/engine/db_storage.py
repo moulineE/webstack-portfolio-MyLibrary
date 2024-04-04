@@ -153,7 +153,8 @@ class DBStorage:
 
     def book_search(self, q: str) -> list[Type[Book]]:
         """search for a book"""
-        objs = (self.__session.query(classes['Book_by_languages']).order_by(Book_by_languages.book_title)
+        objs = (self.__session.query(classes['Book_by_languages']).
+                order_by(Book_by_languages.book_title)
                 .filter(Book_by_languages.book_title.like('%'+q+'%'))).all()
         return objs
 
@@ -196,3 +197,12 @@ class DBStorage:
             if book_lang.language_id == lang_id:
                 return book_lang
         return None
+
+    def get_lang_id_by_lang_name(self, lang: str) -> str:
+        """get a language by its id"""
+        lang = self.__session.query(Language).filter_by(
+            language_name=lang).first()
+        if lang is None:
+            print(f"No language found with id {lang}")
+            return None
+        return lang.id
