@@ -222,7 +222,7 @@ def book() -> str | Response:
         return make_response(jsonify({'error': "Book not found,"
                                                " check the book_id"}), 404)
     book_lang = storage.get_book_by_lang(book_id, lang)
-    if not book:
+    if not book_lang:
         return make_response(jsonify({'error': "lang,"
                                                " check the lang"}), 404)
     author = storage.pub_get("Author", book.author_id)
