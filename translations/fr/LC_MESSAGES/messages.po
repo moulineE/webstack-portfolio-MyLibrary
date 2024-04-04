@@ -1,0 +1,168 @@
+# French translations for PROJECT.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-04-04 07:55+0000\n"
+"PO-Revision-Date: 2024-04-04 07:55+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: templates/book.html:2 templates/index.html:2 templates/landing.html:2
+#: templates/login.html:2 templates/profile.html:2 templates/register.html:2
+msgid "html_lang"
+msgstr "fr"
+
+#: templates/book.html:12 templates/index.html:12 templates/login.html:10
+#: templates/register.html:10
+msgid "Home"
+msgstr "Page d'acceuil"
+
+#: templates/book.html:14 templates/index.html:14
+msgid "profile"
+msgstr "profil"
+
+#: templates/book.html:15 templates/index.html:15 templates/profile.html:12
+msgid "logout"
+msgstr "Se déconnecter"
+
+#: templates/book.html:20 templates/index.html:17 templates/login.html:6
+#: templates/profile.html:14 templates/register.html:11
+msgid "login"
+msgstr "Se connecter"
+
+#: templates/book.html:21 templates/index.html:18 templates/login.html:11
+#: templates/profile.html:15
+msgid "register"
+msgstr "S'inscrire"
+
+#: templates/book.html:33
+msgid "previous"
+msgstr "précédente"
+
+#: templates/book.html:33
+msgid "next"
+msgstr "suivante"
+
+#: templates/index.html:26
+msgid "search_for_a_book"
+msgstr "Rechercher un livre"
+
+#: templates/landing.html:16
+msgid "app description"
+msgstr "Une bibliothèque libre entre vos mains"
+
+#: templates/landing.html:20
+msgid "features"
+msgstr "Fonctionnalités"
+
+#: templates/landing.html:21
+msgid "about"
+msgstr "à propos"
+
+#: templates/landing.html:22
+msgid "project_repo"
+msgstr "Project Repository"
+
+#: templates/landing.html:23
+msgid "deployed_project"
+msgstr "Projet déployé"
+
+#: templates/landing.html:45
+msgid "-_Searchable_books_database"
+msgstr " - Base de données de livres recherchable"
+
+#: templates/landing.html:47
+msgid "A_modern_searchable_books..."
+msgstr "Une base de données de livres recherchable moderne qui vous donne un accès rapide à une bibliothèque de livre"
+
+#: templates/landing.html:50
+msgid "User_system"
+msgstr "- Système utilisateur"
+
+#: templates/landing.html:52
+msgid "User_system_descr"
+msgstr "Un système utilisateur qui vous permet de continuer la lecture là où vous l'avez laissé"
+
+#: templates/landing.html:55
+msgid "bookmark_system"
+msgstr "- Système de marque-pages"
+
+#: templates/landing.html:57
+msgid "bookmark_system_desc"
+msgstr "Un système de marque-pages qui permet de mémoriser les pages intéressantes en leur donnant un nom"
+
+#: templates/landing.html:65
+msgid "my_inspiration"
+msgstr "Mon inspiration pour le projet"
+
+#: templates/login.html:21 templates/register.html:25
+msgid "Password:"
+msgstr "Mot de passe:"
+
+#: templates/login.html:26
+msgid "Login"
+msgstr "Se connecter"
+
+#: templates/profile.html:5
+msgid "User_profile_title"
+msgstr "Profil d'Utilisateur"
+
+#: templates/profile.html:10
+msgid "Home:"
+msgstr "Page d'acceuil"
+
+#: templates/profile.html:25 templates/register.html:19
+msgid "first_name"
+msgstr "Prénom:"
+
+#: templates/profile.html:27 templates/register.html:21
+msgid "last_name"
+msgstr "Nom de famille:"
+
+#: templates/profile.html:31
+msgid "update_profile"
+msgstr "Mettre à jour le profil"
+
+#: templates/profile.html:33 templates/profile.html:37
+msgid "change_password"
+msgstr "Changer de mot de passe"
+
+#: templates/profile.html:35
+msgid "new_password"
+msgstr "Nouveau mot de passe"
+
+#: templates/register.html:6
+msgid "Register_Title"
+msgstr "Inscription"
+
+#: templates/register.html:27
+msgid "Language:"
+msgstr "Langue"
+
+#: templates/register.html:29
+msgid "English"
+msgstr "Anglais"
+
+#: templates/register.html:30
+msgid "French"
+msgstr "Francais"
+
+#: templates/register.html:32
+msgid "Register:"
+msgstr "S'inscrire"
+
+#: templates/index.html:7
+msgid "index.js"
+msgstr "index.js"
+
