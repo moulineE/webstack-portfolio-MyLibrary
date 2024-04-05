@@ -17,8 +17,18 @@ def get_authors() -> Response:
 
 @app_views.route('/authors/<author_id>', strict_slashes=False)
 def get_author(author_id) -> Response | tuple[Response, int]:
-    """ retrieves a author by id """
+    """ retrieves an author by id """
     author = storage.pub_get("Author", author_id)
+    if author is None:
+        return jsonify({"error": "Not found"}), 404
+    return jsonify(author.to_dict())
+
+
+@app_views.route('/authors_by_book/<book_id>', strict_slashes=False)
+def get_author_by_book_id(book_id) -> Response | tuple[Response, int]:
+    """ retrieves an author by book_id """
+    book = storage.pub_get("Book", book_id)
+    author = storage.pub_get("Author", book.author_id)
     if author is None:
         return jsonify({"error": "Not found"}), 404
     return jsonify(author.to_dict())

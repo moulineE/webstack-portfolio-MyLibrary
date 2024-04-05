@@ -1,35 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang={{ _('html_lang') }}>
 <head>
     <meta charset="UTF-8" name="viewport" content="initial-scale=1, width=device-width">
-    <title>User Profile</title>
+    <title>{{ _('User_profile_title') }}</title>
     <link rel="stylesheet" href="../static/styles/profile.css">
 </head>
 <body>
 <div id="linkbar">
-    <a href="index.html">Home</a>
+    <a href="index.html">{{ _('Home:') }}</a>
     {% if user %}
-    <a href="logout">Logout</a>
+    <a href="logout">{{ _('logout') }}</a>
     {% else %}
-    <a href="login">Login</a>
-    <a href="register">Register</a>
+    <a href="login">{{ _('login') }}</a>
+    <a href="register">{{ _('register') }}</a>
+    {% endif %}
+    {% if request.cookies.get('lang') == 'en' %}
+    <a href="{{ url_for('set_language', lang='fr') }}">Francais</a>
+    {% elif request.cookies.get('lang') == 'fr' %}
+    <a href="{{ url_for('set_language', lang='en') }}">English</a>
     {% endif %}
 </div>
-    <h1>User Profile</h1>
+    <h1>{{ _('User_profile_title') }}</h1>
     <form method="POST" id="profileForm">
-        <label for="first_name">First Name:</label>
+        <label for="first_name">{{ _('first_name') }}</label>
         <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required>
-        <label for="last_name">Last Name:</label>
+        <label for="last_name">{{ _('last_name') }}</label>
         <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required>
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" value="{{ user.email }}" required>
-        <button type="submit">Update Profile</button>
+        <label for="language">{{ _('Language:') }}</label>
+        <select id="language" name="language" required>
+            <option value="en">{{ _('English') }}</option>
+            <option value="fr">{{ _('French') }}</option>
+        </select>
+        <button type="submit">{{ _('update_profile') }}</button>
     </form>
-    <h2>Change Password</h2>
+    <h2>{{ _('change_password') }}</h2>
     <form method="POST" id="passwordForm">
-        <label for="password">New Password:</label>
+        <label for="password">{{ _('new_password') }}</label>
         <input type="password" id="password" name="password" required>
-        <button type="submit">Change Password</button>
+        <button type="submit">{{ _('change_password') }}</button>
     </form>
 </body>
 </html>

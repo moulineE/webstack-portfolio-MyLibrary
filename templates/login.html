@@ -1,24 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang={{ _('html_lang') }}>
 <head>
     <meta charset="UTF-8" name="viewport" content="initial-scale=1, width=device-width">
     <link rel="stylesheet" href="../static/styles/login.css" />
-    <title>Login</title>
+    <title>{{ _('login') }}</title>
 </head>
 <body>
 <div id="linkbar">
-    <a href="index.html">Home</a>
-    <a href="register">Register</a>
+    <a href="index.html">{{ _('Home') }}</a>
+    <a href="register">{{ _('register') }}</a>
+    {% if request.cookies.get('lang') == 'en' %}
+    <a href="{{ url_for('set_language', lang='fr') }}">Francais</a>
+    {% elif request.cookies.get('lang') == 'fr' %}
+    <a href="{{ url_for('set_language', lang='en') }}">English</a>
+    {% endif %}
 </div>
     <form method="POST">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
-        <label for="password">Password:</label>
+        <label for="password">{{ _('Password:') }}</label>
         <input type="password" id="password" name="password" required>
         {% if error %}
     <p class="error">{{ error }}</p>
         {% endif %}
-        <button type="submit">Login</button>
+        <button type="submit">{{ _('Login') }}</button>
     </form>
 </body>
 </html>

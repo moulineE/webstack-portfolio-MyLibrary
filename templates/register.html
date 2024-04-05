@@ -1,25 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang={{ _('html_lang') }}>
 <head>
     <meta charset="UTF-8" name="viewport" content="initial-scale=1, width=device-width">
     <link rel="stylesheet" href="../static/styles/register.css" />
-    <title>Register</title>
+    <title>{{ _('Register_Title') }}</title>
 </head>
 <body>
 <div id="linkbar">
-    <a href="index.html">Home</a>
-    <a href="login">Login</a>
+    <a href="index.html">{{ _('Home') }}</a>
+    <a href="login">{{ _('login') }}</a>
+    {% if request.cookies.get('lang') == 'en' %}
+    <a href="{{ url_for('set_language', lang='fr') }}">Francais</a>
+    {% elif request.cookies.get('lang') == 'fr' %}
+    <a href="{{ url_for('set_language', lang='en') }}">English</a>
+    {% endif %}
 </div>
     <form method="POST">
-        <label for="first_name">First Name:</label>
+        <label for="first_name">{{ _('first_name') }}</label>
         <input type="text" id="first_name" name="first_name" required>
-        <label for="last_name">Last Name:</label>
+        <label for="last_name">{{ _('last_name') }}</label>
         <input type="text" id="last_name" name="last_name" required>
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
-        <label for="password">Password:</label>
+        <label for="password">{{ _('Password:') }}</label>
         <input type="password" id="password" name="password" required>
-        <button type="submit">Register</button>
+        <label for="language">{{ _('Language:') }}</label>
+        <select id="language" name="language" required>
+            <option value="en">{{ _('English') }}</option>
+            <option value="fr">{{ _('French') }}</option>
+        </select>
+        <button type="submit">{{ _('Register:') }}</button>
     </form>
 </body>
 </html>

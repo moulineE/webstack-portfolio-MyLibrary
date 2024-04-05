@@ -5,7 +5,7 @@ import models
 from models.base_model import BaseModel, Base
 from models.user import User
 from models.author import Author
-from models.book import Book, Language
+from models.book import Book, Language, Book_by_languages
 from models.bookmark import Bookmark
 from models.opened_book import Opened_book
 from models.book_page import Book_page
@@ -16,7 +16,8 @@ from typing import Dict, Type
 
 classes = {"User": User, "Author": Author, "Book": Book,
            "Bookmark": Bookmark, "Opened_book": Opened_book,
-           "Book_page": Book_page, "Language": Language}
+           "Book_page": Book_page, "Language": Language,
+           "Book_by_languages": Book_by_languages}
 pub_classes = {"Author": Author, "Book": Book, "Book_page": Book_page}
 
 
@@ -44,15 +45,17 @@ class DBStorage:
                     new_dict[key] = obj
         return new_dict
 
-    def get_chapter(self, book_id: str, page_no: int) -> str | None:
+    def get_chapter(self, book_id: str, page_no: int, lang: str) -> str | None:
         """get the chapter of the book"""
-        book = self.pub_get(Book, book_id)
+        book = self.get_book_by_lang(book_id, lang)
         if book is None:
             return None
         if int(page_no) < 1 or int(page_no) > book.chapter_count:
             return None
+        lang_id = self.__session.query(Language).filter_by(
+            language_name=lang).first().id
         chapter = self.__session.query(Book_page).filter_by(
-            book_id=book_id, page_no=page_no).first()
+            book_id=book_id, page_no=page_no, language_id=lang_id).first()
         return chapter.content
 
     def new(self, obj: BaseModel) -> None:
@@ -79,6 +82,10 @@ class DBStorage:
     def close(self) -> None:
         """Close the session"""
         self.__session.remove()
+
+    def get_session(self):
+        """Returns the current SQLAlchemy Session"""
+        return self.__session
 
     def pub_get(self, cls: Type[BaseModel], id: str) -> BaseModel | None:
         """
@@ -150,8 +157,9 @@ class DBStorage:
 
     def book_search(self, q: str) -> list[Type[Book]]:
         """search for a book"""
-        objs = (self.__session.query(classes['Book']).order_by(Book.book_title)
-                .filter(Book.book_title.like('%'+q+'%'))).all()
+        objs = (self.__session.query(classes['Book_by_languages']).
+                order_by(Book_by_languages.book_title)
+                .filter(Book_by_languages.book_title.like('%'+q+'%'))).all()
         return objs
 
     def count(self, cls: Type[BaseModel] | str) -> int | None:
@@ -179,3 +187,26 @@ class DBStorage:
             print(f"No language found with id {lang_id}")
             return None
         return lang.language_name
+
+    def get_book_by_lang(self, book_id, lang):
+        """get a book by its language"""
+        lang_id = self.__session.query(Language).filter_by(
+            language_name=lang).first().id
+        book = self.__session.query(Book).options(
+            joinedload(Book.by_languages)).get(book_id)
+        if book is None:
+            print(f"No book found with id {book_id}")
+            return None
+        for book_lang in book.by_languages:
+            if book_lang.language_id == lang_id:
+                return book_lang
+        return None
+
+    def get_lang_id_by_lang_name(self, lang: str) -> str:
+        """get a language by its id"""
+        lang = self.__session.query(Language).filter_by(
+            language_name=lang).first()
+        if lang is None:
+            print(f"No language found with id {lang}")
+            return None
+        return lang.id

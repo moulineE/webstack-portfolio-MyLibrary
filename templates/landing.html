@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang={{ _('html_lang') }}>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,14 +13,14 @@
     <nav>
         <div class="logo">
             <h1>MyLibrary</h1>
-            <p>A public domain library in your hand</p>
+            <p>{{ _('app description') }}</p>
         </div>
         <div class="menu">
             <ul>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="https://github.com/moulineE/MyLibrary">Project Repository</a></li>
-                <li><a href="/mylibrary/">Deployed Project</a></li>
+                <li><a href="#features">{{ _('features') }}</a></li>
+                <li><a href="#about">{{ _('about') }}</a></li>
+                <li><a href="https://github.com/moulineE/MyLibrary">{{ _('project_repo') }}</a></li>
+                <li><a href="/mylibrary/">{{ _('deployed_project') }}</a></li>
             </ul>
         </div>
     </nav>
@@ -42,19 +42,19 @@
 <section id="features">
     <ul>
         <li class="feature1">
-            <h2> - Searchable books database</h2>
+            <h2>{{ _('-_Searchable_books_database') }}</h2>
             <img class="feature-gif hide" src="path_to_your_gif.gif" alt="Description of GIF">
-            <p>A modern searchable books database that give you a quick access to the library </p>
+            <p>{{ _('A_modern_searchable_books...') }}</p>
         </li>
         <li class="feature-2">
-            <h2>- User system</h2>
+            <h2>{{ _('User_system') }}</h2>
             <img class="feature-gif hide" src="path_to_your_gif.gif" alt="Description of GIF">
-            <p>A user system which allows you to continue reading where you left off  </p>
+            <p>{{ _('User_system_descr') }}</p>
         </li>
         <li class="feature-3">
-            <h2>- Bookmark system</h2>
+            <h2>{{ _('bookmark_system') }}</h2>
             <p></p>
-            <p>A bookmark system which allows you to remember interesting pages by giving it a name </p>
+            <p>{{ _('bookmark_system_desc') }}</p>
         </li>
     </ul>
     <!-- Repeat for other features -->
@@ -62,7 +62,7 @@
 
 <!-- About Section -->
 <section id="about">
-    <p>My inspiration for the project</p>
+    <p>{{ _('my_inspiration') }}</p>
 
 </section>
 </body>

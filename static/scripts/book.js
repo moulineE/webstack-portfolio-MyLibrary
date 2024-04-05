@@ -5,6 +5,7 @@ $(document).ready(function () {
       const currentPage = $(this).data('page');
       const bookId = $(this).data('book-id');
       const userId = $(this).data('user-id');
+      const lang = $(this).data('lang');
       $.ajax({
         url: '/mylibrary/api/v1/bookmarks',
         type: 'POST',
@@ -12,7 +13,7 @@ $(document).ready(function () {
           bookmark_name: bookmarkName,
           page: currentPage,
           book_id: bookId,
-          user_id: userId
+          user_id: userId,
         },
         success: function (result) {
           alert('Bookmark added successfully!');

@@ -46,10 +46,9 @@ def get_locale() -> str:
         if usr_langID:
             usr_lang = storage.get_lang_by_lang_id(usr_langID)
             if usr_lang:
-                usr_lang_syb = usr_lang[:2]
                 response = make_response("Setting a session cookie")
-                response.set_cookie('lang', usr_lang_syb)
-                return usr_lang_syb
+                response.set_cookie('lang', usr_lang)
+                return usr_lang
     best_match = request.accept_languages.best_match(app.config['LANGUAGES'])
     response = make_response("Setting a session cookie")
     response.set_cookie('lang', best_match)
@@ -57,6 +56,16 @@ def get_locale() -> str:
 
 
 babel = Babel(app, locale_selector=get_locale)
+
+
+@app.after_request
+def after_request(response):
+    """ Set a cookie with the language """
+    if request.endpoint == 'set_language' or request.endpoint == 'login':
+        return response
+    locale = str(get_locale())
+    response.set_cookie('lang', locale)
+    return response
 
 
 @app.teardown_appcontext
@@ -100,7 +109,11 @@ def login() -> str | Response:
         user = storage.get_user_by_email(email)
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for('home_page'))
+            langId = user.language_id
+            lang = storage.get_lang_by_lang_id(langId)
+            response = make_response(redirect(url_for('home_page')))
+            response.set_cookie('lang', lang)
+            return response
         return render_template('login.html', error="Invalid email or password")
     return render_template('login.html')
 
@@ -128,8 +141,10 @@ def register() -> str | Response:
         last_name = request.form['last_name']
         email = request.form['email']
         password = request.form['password']
+        language = request.form.get('language')
+        langid = storage.get_lang_id_by_lang_name(language)
         user = User(first_name=first_name, last_name=last_name,
-                    email=email, password=password)
+                    email=email, password=password, language_id=langid)
         BaseModel.save(user)
         login_user(user)
         return redirect(url_for('home_page'))
@@ -148,6 +163,7 @@ def profile() -> str | Response:
         last_name = request.form.get('last_name')
         email = request.form.get('email')
         password = request.form.get('password')
+        language = request.form.get('language')
         user = current_user
         if first_name:
             user.first_name = first_name
@@ -157,6 +173,9 @@ def profile() -> str | Response:
             user.email = email
         if password:
             user.password = generate_password_hash(password)
+        if language:
+            langid = storage.get_lang_id_by_lang_name(language)
+            user.language_id = langid
         BaseModel.save(user)
         return redirect(url_for('home_page'))
     return render_template('profile.html', user=current_user)
@@ -214,18 +233,27 @@ def book() -> str | Response:
     page = int(page)
     if page < 1:
         page = 1
+    if request.args.get('lang'):
+        lang = request.args.get('lang')
+    else:
+        lang = "en"
     book = storage.pub_get("Book", book_id)
     if not book:
         return make_response(jsonify({'error': "Book not found,"
                                                " check the book_id"}), 404)
+    book_lang = storage.get_book_by_lang(book_id, lang)
+    if not book_lang:
+        return make_response(jsonify({'error': "lang,"
+                                               " check the lang"}), 404)
     author = storage.pub_get("Author", book.author_id)
     if not author:
         return make_response(jsonify({'error': "Author not found"}), 404)
-    book = book.to_dict()
-    book['author_name'] = "{} {}".format(author.first_name, author.last_name)
-    if page > book['chapter_count']:
-        page = book['chapter_count']
-    chapter = storage.get_chapter(book_id, page)
+    book_lang = book_lang.to_dict()
+    book_lang['author_name'] = "{} {}".format(author.first_name,
+                                              author.last_name)
+    if page > book_lang['chapter_count']:
+        page = book_lang['chapter_count']
+    chapter = storage.get_chapter(book_id, page, lang)
     if current_user.is_authenticated:
         opened_book = storage.get_opened_book_by_user_id_and_bookid(
             current_user.id, book_id)
@@ -236,7 +264,7 @@ def book() -> str | Response:
                                         page=opened_book.page, ))
             if page > opened_book.page:
                 opened_book.page = page
-            if page == book['chapter_count']:
+            if page == book_lang['chapter_count']:
                 opened_book.read = True
             BaseModel.save(opened_book)
             pass
@@ -246,8 +274,18 @@ def book() -> str | Response:
                                       page=1, read=False)
             BaseModel.save(opened_book)
         return render_template('book.html', user=current_user,
-                               book=book, chapter=chapter, page=page)
-    return render_template('book.html', book=book, chapter=chapter, page=page)
+                               book=book_lang, chapter=chapter, page=page)
+    return render_template('book.html', book=book_lang, chapter=chapter, page=page)
+
+
+@app.route('/set_language/<lang>')
+def set_language(lang):
+    if lang in Config.LANGUAGES:
+        response = make_response(redirect(request.referrer))
+        response.set_cookie('lang', lang)
+        return response
+    else:
+        return "Invalid language", 400
 
 
 if __name__ == '__main__':

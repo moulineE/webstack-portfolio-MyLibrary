@@ -20,7 +20,7 @@ $(document).ready(function () {
       } else {
     publish = 'publié le'
       }
-      if (lang == 'en' && book.language_id == 'f14fd3fa-7f84-4177-96c6-8115def549a8') {
+      if (lang == 'fr' && book.language_id == 'ca9669f2-1908-4c8c-b3ce-38bdb2d04b62') {
               html += `<li><a style="text-decoration:none" href="/mylibrary/book?id=${book.book_id}&lang=${lang}"><h2> ${book.book_title}</h2><h3>${author.first_name + ' ' + author.last_name}</h3><h4>${publish} ${book.published_date}</h4><p>${book.book_summary}</p></a></li>`;
       }
     }
