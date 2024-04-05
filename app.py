@@ -274,8 +274,8 @@ def book() -> str | Response:
                                       page=1, read=False)
             BaseModel.save(opened_book)
         return render_template('book.html', user=current_user,
-                               book=book, chapter=chapter, page=page)
-    return render_template('book.html', book=book, chapter=chapter, page=page)
+                               book=book_lang, chapter=chapter, page=page)
+    return render_template('book.html', book=book_lang, chapter=chapter, page=page)
 
 
 @app.route('/set_language/<lang>')

@@ -164,5 +164,5 @@ msgstr "S'inscrire"
 
 #: templates/index.html:7
 msgid "index.js"
-msgstr "index.js"
+msgstr "index_fr.js"
 

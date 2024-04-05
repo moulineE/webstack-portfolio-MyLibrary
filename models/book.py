@@ -9,7 +9,8 @@ book_languages = Table('book_languages', Base.metadata,
                        Column('book_id', String(60),
                               ForeignKey('books.id')),
                        Column('language_id', String(60),
-                              ForeignKey('languages.id'))
+                              ForeignKey('languages.id')),
+                       Column('book_languages_lang_id', String(60),)
                        )
 
 
@@ -58,3 +59,13 @@ class Book_by_languages(BaseModel, Base):
     def __init__(self, *args, **kwargs) -> None:
         """initializes Book_by_languages"""
         super().__init__(*args, **kwargs)
+        self.add_to_book_languages()
+
+    def add_to_book_languages(self):
+        """Adds a new row to the book_languages table"""
+        new_book_language = book_languages.insert().values(
+            book_id=self.book_id,
+            language_id=self.language_id,
+        )
+        models.storage.get_session().execute(new_book_language)
+        models.storage.save()

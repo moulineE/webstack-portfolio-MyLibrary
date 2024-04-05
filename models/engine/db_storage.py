@@ -83,6 +83,10 @@ class DBStorage:
         """Close the session"""
         self.__session.remove()
 
+    def get_session(self):
+        """Returns the current SQLAlchemy Session"""
+        return self.__session
+
     def pub_get(self, cls: Type[BaseModel], id: str) -> BaseModel | None:
         """
         Returns the object based on the class name and its ID,

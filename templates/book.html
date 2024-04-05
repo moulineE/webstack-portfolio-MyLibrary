@@ -13,8 +13,8 @@
     {% if user %}
     <a href="profile">{{ _('profile') }}</a>
     <a href="logout">{{ _('logout') }}</a>
-        <button id="addBookmarkBtn" data-book-id="{{ book.id }}" data-page="{{ page }}" data-user-id="{{ user.id }}">Add Bookmark</button>
-        <button id="getBookmarksBtn" data-book-id="{{ book.id }}" data-user-id="{{ user.id }}">Get Bookmarks</button>
+        <button id="addBookmarkBtn" data-book-id="{{ book.book_id }}" data-page="{{ page }}" data-user-id="{{ user.id }}">Add Bookmark</button>
+        <button id="getBookmarksBtn" data-book-id="{{ book.book_id }}" data-user-id="{{ user.id }}">Get Bookmarks</button>
         <div id="bookmarksContainer"></div>
     {% else %}
     <a href="login">{{ _('login') }}</a>
@@ -30,7 +30,7 @@
 <p>by {{ book.author_name }}</p>
 <p class="chapter-box">{{ chapter }}</p>
 <footer>
-    <p><a href="/mylibrary/book?id={{ book.id }}&page={{ page - 1 }}">{{ _('previous') }}</a> Page {{ page }} of {{ book.chapter_count }} <a href="/mylibrary/book?id={{ book.id }}&page={{ page + 1 }}">{{ _('next') }}</a></p>
+    <p><a href="/mylibrary/book?id={{ book.book_id }}&page={{ page - 1 }}&lang={{ request.cookies.get('lang') }}">{{ _('previous') }}</a> Page {{ page }} of {{ book.chapter_count }} <a href="/mylibrary/book?id={{ book.book_id }}&page={{ page + 1 }}&lang={{ request.cookies.get('lang') }}">{{ _('next') }}</a></p>
 </footer>
 </body>
 </html>
