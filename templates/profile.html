@@ -14,9 +14,9 @@
     <a href="login">{{ _('login') }}</a>
     <a href="register">{{ _('register') }}</a>
     {% endif %}
-    {% if request.cookies.get('lang') == 'en' %}
+    {% if lang == 'en' %}
     <a href="{{ url_for('set_language', lang='fr') }}">Francais</a>
-    {% elif request.cookies.get('lang') == 'fr' %}
+    {% elif lang == 'fr' %}
     <a href="{{ url_for('set_language', lang='en') }}">English</a>
     {% endif %}
 </div>

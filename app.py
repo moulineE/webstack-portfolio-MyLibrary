@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ Flask Application """
 from flask import (Flask, render_template, make_response, jsonify,
-                   request, redirect, url_for, Response)
+                   request, redirect, url_for, Response, session)
 from flask_login import (LoginManager, login_user, logout_user,
                          login_required, current_user)
 from flask_cors import CORS
@@ -38,20 +38,17 @@ def get_locale() -> str:
     if not check the Accept-Language header in the HTTP request
     after checking all the above, set a session cookie with the correct lang
     """
-    locale_lang = request.cookies.get('lang')
-    if locale_lang and locale_lang in Config.LANGUAGES:
-        return locale_lang
+    if 'lang' in session and session['lang'] in app.config['LANGUAGES']:
+        return session['lang']
     if current_user.is_authenticated:
         usr_langID = current_user.language_id
         if usr_langID:
             usr_lang = storage.get_lang_by_lang_id(usr_langID)
             if usr_lang:
-                response = make_response("Setting a session cookie")
-                response.set_cookie('lang', usr_lang)
+                session['lang'] = usr_lang
                 return usr_lang
     best_match = request.accept_languages.best_match(app.config['LANGUAGES'])
-    response = make_response("Setting a session cookie")
-    response.set_cookie('lang', best_match)
+    session['lang'] = best_match
     return best_match
 
 
@@ -64,7 +61,7 @@ def after_request(response):
     if request.endpoint == 'set_language' or request.endpoint == 'login':
         return response
     locale = str(get_locale())
-    response.set_cookie('lang', locale)
+    session['lang'] = locale
     return response
 
 
@@ -111,11 +108,12 @@ def login() -> str | Response:
             login_user(user)
             langId = user.language_id
             lang = storage.get_lang_by_lang_id(langId)
-            response = make_response(redirect(url_for('home_page')))
-            response.set_cookie('lang', lang)
-            return response
-        return render_template('login.html', error="Invalid email or password")
-    return render_template('login.html')
+            session['lang'] = lang
+            return redirect(url_for('home_page'))
+        return render_template('login.html',
+                               error="Invalid email or password",
+                               lang=session['lang'])
+    return render_template('login.html', lang=session['lang'])
 
 
 @app.route('/mylibrary/logout')
@@ -126,6 +124,7 @@ def logout() -> Response:
     and redirect to the home page
     :return:
     """
+    session.clear()
     logout_user()
     return redirect(url_for('home_page'))
 
@@ -148,7 +147,7 @@ def register() -> str | Response:
         BaseModel.save(user)
         login_user(user)
         return redirect(url_for('home_page'))
-    return render_template('register.html')
+    return render_template('register.html', lang=session['lang'])
 
 
 @app.route('/mylibrary/profile', methods=['GET', 'POST'])
@@ -178,7 +177,8 @@ def profile() -> str | Response:
             user.language_id = langid
         BaseModel.save(user)
         return redirect(url_for('home_page'))
-    return render_template('profile.html', user=current_user)
+    return render_template('profile.html',
+                           user=current_user, lang=session['lang'])
 
 
 @app.route('/', strict_slashes=False)
@@ -198,8 +198,9 @@ def home_page() -> str:
     :return:
     """
     if current_user.is_authenticated:
-        return render_template('index.html', user=current_user)
-    return render_template('index.html')
+        return render_template('index.html',
+                               user=current_user, lang=session['lang'])
+    return render_template('index.html', lang=session['lang'])
 
 
 @app.route('/mylibrary/books', strict_slashes=False)
@@ -261,7 +262,8 @@ def book() -> str | Response:
             # Update opened_book as necessary
             if page == 1 and opened_book.page != 1:
                 return redirect(url_for('book', id=book_id,
-                                        page=opened_book.page, ))
+                                        page=opened_book.page,
+                                        lang=session['lang']))
             if page > opened_book.page:
                 opened_book.page = page
             if page == book_lang['chapter_count']:
@@ -274,16 +276,17 @@ def book() -> str | Response:
                                       page=1, read=False)
             BaseModel.save(opened_book)
         return render_template('book.html', user=current_user,
-                               book=book_lang, chapter=chapter, page=page)
-    return render_template('book.html', book=book_lang, chapter=chapter, page=page)
+                               book=book_lang, chapter=chapter, page=page,
+                               lang=session['lang'])
+    return render_template('book.html', book=book_lang, chapter=chapter,
+                           page=page, lang=session['lang'])
 
 
 @app.route('/set_language/<lang>')
 def set_language(lang):
     if lang in Config.LANGUAGES:
-        response = make_response(redirect(request.referrer))
-        response.set_cookie('lang', lang)
-        return response
+        session['lang'] = lang
+        return redirect(request.referrer)
     else:
         return "Invalid language", 400
 
